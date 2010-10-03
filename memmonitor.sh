@@ -1,14 +1,9 @@
-[root@vcocprhost tmp]# cat memmonitor.sh
 #!/bin/sh
 #Shell added by Daniel Rice 10/3/2010 to monitor memory usage on the system.
 #Code adapted from http://www.linuxquestions.org/questions/programming-9/how-to-programmatically-monitor-a-process-memory-usage-383517/
 #Version History
 #1.0 - changed the output file to report the Date and Time along side the memory statistics.
-#
-#
-#Enhancement Ideas:
-#Split by each matched process, make separate columns in the CSV file, along with summary statistics
-#Currently, the script only adds up the sum of all matching processes
+#1.1 - added system memory statistics
 
 USAGE="Usage: $0 processName"
 
@@ -20,7 +15,7 @@ fi
 
 LOG_FILE="memusage.csv"
 
-echo "Date,Time,ElapsedTime,VmSize,VmRSS" > $LOG_FILE
+echo "Date,Time,ElapsedTime,VmSize (KB),VmRSS (KB),TotMem (B),UsedMem (B),FreeMem (B)" > $LOG_FILE
 
 ELAPSED_TIME=0
 PERIOD=5        # seconds
@@ -59,9 +54,9 @@ do
 
    TIME=`date +"%r %Z"`
    DATE=`date +%D`
-
-   echo "$DATE,$TIME,$ELAPSED_TIME sec, $SUM_VM_SIZE KB, $SUM_RSS_SIZE KB"
-   echo "$DATE,$TIME,$ELAPSED_TIME,$SUM_VM_SIZE,$SUM_RSS_SIZE" >> $LOG_FILE
+   SYSMEM=`free -k | awk '/Mem/ {print $2,",",$3,",",$4}'`
+   echo "$DATE,$TIME,$ELAPSED_TIME sec, $SUM_VM_SIZE, $SUM_RSS_SIZE,$SYSMEM"
+   echo "$DATE,$TIME,$ELAPSED_TIME,$SUM_VM_SIZE,$SUM_RSS_SIZE,$SYSMEM" >> $LOG_FILE
    sleep $PERIOD
    VM_SIZE=""
    VM_RSS=""
