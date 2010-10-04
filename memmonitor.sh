@@ -3,7 +3,7 @@
 #Code adapted from http://www.linuxquestions.org/questions/programming-9/how-to-programmatically-monitor-a-process-memory-usage-383517/
 #Version History
 #1.0 - changed the output file to report the Date and Time along side the memory statistics.
-#1.1 - added system memory statistics
+
 
 USAGE="Usage: $0 processName"
 
@@ -15,7 +15,7 @@ fi
 
 LOG_FILE="memusage.csv"
 
-echo "Date,Time,ElapsedTime,VmSize (KB),VmRSS (KB),TotMem (B),UsedMem (B),FreeMem (B)" > $LOG_FILE
+echo "Date,Time,ElapsedTime,VmSize (KB),VmRSS (KB),TotMem (B),UsedMem (B),FreeMem (B)" >> $LOG_FILE
 
 ELAPSED_TIME=0
 PERIOD=5        # seconds
